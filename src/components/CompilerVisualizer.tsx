@@ -32,7 +32,7 @@ export function CompilerVisualizer({ isDarkMode }: CompilerVisualizerProps) {
   return (
     <div className="space-y-6">
       {/* Input Section */}
-      <div className={`p-6 rounded-lg ${
+      <div className={`p-4 sm:p-6 rounded-lg ${
         isDarkMode ? 'bg-gray-800' : 'bg-white'
       } shadow-lg`}>
         <h2 className="text-xl font-semibold mb-4">Enter Expression</h2>
@@ -67,54 +67,56 @@ export function CompilerVisualizer({ isDarkMode }: CompilerVisualizerProps) {
       {/* Results Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Tokens Table */}
-        <div className={`p-6 rounded-lg ${
+        <div className={`p-4 sm:p-6 rounded-lg ${
           isDarkMode ? 'bg-gray-800' : 'bg-white'
         } shadow-lg overflow-x-auto`}>
           <h2 className="text-xl font-semibold mb-4">Tokens</h2>
-          <table className="w-full">
-            <thead className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-              <tr>
-                <th className="text-left py-2">Token</th>
-                <th className="text-left py-2">Type</th>
-                <th className="text-left py-2">Position</th>
-              </tr>
-            </thead>
-            <tbody className={`divide-y ${
-              isDarkMode ? 'divide-gray-700' : 'divide-gray-200'
-            }`}>
-              {tokens.map((token, index) => (
-                <tr key={index}>
-                  <td className="py-2">{token.value}</td>
-                  <td className="py-2">{token.type}</td>
-                  <td className="py-2">{token.position}</td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[300px]">
+              <thead className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                <tr>
+                  <th className="text-left py-2 px-2">Token</th>
+                  <th className="text-left py-2 px-2">Type</th>
+                  <th className="text-left py-2 px-2">Position</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className={`divide-y ${
+                isDarkMode ? 'divide-gray-700' : 'divide-gray-200'
+              }`}>
+                {tokens.map((token, index) => (
+                  <tr key={index}>
+                    <td className="py-2 px-2">{token.value}</td>
+                    <td className="py-2 px-2">{token.type}</td>
+                    <td className="py-2 px-2">{token.position}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Parse Tree */}
-        <div className={`p-6 rounded-lg ${
+        <div className={`p-4 sm:p-6 rounded-lg ${
           isDarkMode ? 'bg-gray-800' : 'bg-white'
         } shadow-lg`}>
           <h2 className="text-xl font-semibold mb-4">Parse Tree</h2>
           <div 
             id="tree" 
-            className={`w-full h-[400px] rounded-lg ${
+            className={`w-full h-[300px] sm:h-[400px] rounded-lg ${
               isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
-            }`}
+            } overflow-hidden`}
           />
         </div>
 
         {/* Parsing Steps */}
-        <div className={`p-6 rounded-lg ${
+        <div className={`p-4 sm:p-6 rounded-lg ${
           isDarkMode ? 'bg-gray-800' : 'bg-white'
         } shadow-lg col-span-full`}>
           <h2 className="text-xl font-semibold mb-4">Parsing Steps</h2>
           <div 
             id="parsing-steps"
-            className={`space-y-2 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            className={`space-y-2 max-h-[300px] overflow-y-auto p-4 rounded-lg ${
+              isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-50 text-gray-600'
             }`}
           />
         </div>

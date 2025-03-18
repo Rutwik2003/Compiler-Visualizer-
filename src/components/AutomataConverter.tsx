@@ -22,7 +22,7 @@ export function AutomataConverter({ isDarkMode }: AutomataConverterProps) {
 
   return (
     <div className="space-y-6">
-      <div className={`p-6 rounded-lg ${
+      <div className={`p-4 sm:p-6 rounded-lg ${
         isDarkMode ? 'bg-gray-800' : 'bg-white'
       } shadow-lg`}>
         <div className="max-w-3xl mx-auto">
@@ -109,10 +109,12 @@ export function AutomataConverter({ isDarkMode }: AutomataConverterProps) {
             </h3>
             <div
               id="nfa-graph"
-              className={`rounded-lg p-6 h-80 sm:h-96 overflow-hidden ${
+              className={`rounded-lg p-4 h-[300px] sm:h-[400px] overflow-x-auto overflow-y-hidden ${
                 isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
               } border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
-            />
+            >
+              <div className="w-full h-full min-w-[800px]" />
+            </div>
           </div>
 
           <div>
@@ -123,10 +125,12 @@ export function AutomataConverter({ isDarkMode }: AutomataConverterProps) {
             </h3>
             <div
               id="dfa-graph"
-              className={`rounded-lg p-6 h-80 sm:h-96 overflow-hidden ${
+              className={`rounded-lg p-4 h-[300px] sm:h-[400px] overflow-x-auto overflow-y-hidden ${
                 isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
               } border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
-            />
+            >
+              <div className="w-full h-full min-w-[800px]" />
+            </div>
           </div>
 
           <div>
@@ -137,7 +141,7 @@ export function AutomataConverter({ isDarkMode }: AutomataConverterProps) {
             </h3>
             <div
               id="steps"
-              className={`rounded-lg p-6 font-mono text-sm overflow-y-auto h-80 ${
+              className={`rounded-lg p-6 font-mono text-sm overflow-y-auto h-[300px] ${
                 isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-600'
               } border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
             />
