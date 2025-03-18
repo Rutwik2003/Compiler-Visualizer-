@@ -66,7 +66,7 @@ export function useAutomata() {
 
   function drawNfaGraph(states: any[], links: any[], acceptId: number, selector: string) {
     const width = 1100;
-    const height = 230;
+    const height = 400;
     const svg = d3.select(selector)
       .append('svg')
       .attr('width', width)
@@ -180,7 +180,7 @@ export function useAutomata() {
 
   function drawDfaGraph(dfa: any, selector: string) {
     const width = 1100;
-    const height = 230;
+    const height = 400;
     const svg = d3.select(selector)
       .append('svg')
       .attr('width', width)
@@ -308,7 +308,7 @@ export function useAutomata() {
 
   function drawSyntaxTree(root: any, selector: string) {
     const width = 1100;
-    const height = 230;
+    const height = 400;
     const svg = d3.select(selector)
       .append('svg')
       .attr('width', width)

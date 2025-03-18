@@ -108,13 +108,14 @@ export function AutomataConverter({ isDarkMode }: AutomataConverterProps) {
               {method === 'thompson' ? 'NFA (Nondeterministic Finite Automaton)' : 'Syntax Tree'}
             </h3>
             <div
-              id="nfa-graph"
-              className={`rounded-lg p-4 h-[300px] sm:h-[400px] overflow-x-auto overflow-y-hidden ${
-                isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-              } border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
-            >
-              <div className="w-full h-full min-w-[800px]" />
-            </div>
+  id="nfa-graph"
+  className={`rounded-lg p-4 h-[300px] sm:h-[400px] overflow-x-auto overflow-y-hidden ${
+    isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+  } border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
+>
+  <div className="w-full h-full" />
+</div>
+
           </div>
 
           <div>
