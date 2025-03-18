@@ -172,7 +172,7 @@ export function useAutomata() {
           .attr('text-anchor', 'middle')
           .attr('font-size', '10px')
           .attr('dy', '.35em')
-          .attr('fill', '#333')
+          .attr('fill', '#FFFFFF')
           .text(d.label);
       });
     });
