@@ -20,7 +20,7 @@ function App() {
             <div className="flex items-center">
               <div className="flex items-center space-x-2">
                 {/* <Code2 className="w-6 h-6" /> */}
-                <img src="/assets/komi.png" alt="Logo" className="w-6 h-6" />
+                <img src="./komi.png" alt="Logo" className="w-6 h-6" />
                 <h1 className="text-xl font-bold">Compiler Tools</h1>
               </div>
             </div>
