@@ -119,28 +119,31 @@ function visualizeTree(treeData: TreeNode, steps: ParserStep[]) {
   const stepsDiv = document.getElementById("parsing-steps");
   if (stepsDiv) stepsDiv.innerHTML = "";
 
-  // Set up the tree visualization
-  const width = 600;
-  const height = 400;
+  // Set up the tree visualization with responsive dimensions
+  const containerWidth = document.getElementById("tree")?.clientWidth || 600;
+  const containerHeight = document.getElementById("tree")?.clientHeight || 400;
   const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+  const width = containerWidth - margin.left - margin.right;
+  const height = containerHeight - margin.top - margin.bottom;
 
   const svg = d3.select("#tree")
     .append("svg")
     .attr("width", "100%")
     .attr("height", "100%")
-    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Create the tree layout
+  // Create the tree layout with responsive dimensions
   const treeLayout = d3.tree<TreeNode>()
-    .size([width - margin.left - margin.right, height - margin.top - margin.bottom]);
+    .size([width, height]);
 
   // Create the root node and generate the tree
   const root = d3.hierarchy(treeData);
   const tree = treeLayout(root);
 
-  // Add the links
+  // Add the links with curved paths
   svg.selectAll(".link")
     .data(tree.links())
     .enter()
@@ -153,7 +156,7 @@ function visualizeTree(treeData: TreeNode, steps: ParserStep[]) {
     .attr("stroke", "#666")
     .attr("stroke-width", 1.5);
 
-  // Add the nodes
+  // Add the nodes with improved visibility
   const node = svg.selectAll(".node")
     .data(tree.descendants())
     .enter()
@@ -161,30 +164,31 @@ function visualizeTree(treeData: TreeNode, steps: ParserStep[]) {
     .attr("class", "node")
     .attr("transform", d => `translate(${d.x},${d.y})`);
 
-  // Add circles for nodes
+  // Add circles for nodes with better visibility
   node.append("circle")
-    .attr("r", 6)
+    .attr("r", 8)
     .attr("fill", "#4299e1")
     .attr("stroke", "#2b6cb0")
-    .attr("stroke-width", 1.5);
+    .attr("stroke-width", 2);
 
-  // Add labels
+  // Add labels with improved readability
   node.append("text")
     .attr("dy", "0.31em")
-    .attr("x", d => d.children ? -8 : 8)
+    .attr("x", d => d.children ? -12 : 12)
     .attr("text-anchor", d => d.children ? "end" : "start")
     .text(d => d.data.name)
     .attr("fill", "currentColor")
-    .attr("font-size", "12px");
+    .attr("font-size", "14px")
+    .attr("font-weight", "500");
 
-  // Display parsing steps
+  // Display parsing steps with improved styling
   if (stepsDiv) {
     steps.forEach((step, index) => {
       const stepElement = document.createElement("div");
-      stepElement.className = "mb-2 p-2 rounded";
+      stepElement.className = "mb-3 p-3 rounded bg-opacity-50";
       stepElement.innerHTML = `
-        <div class="font-medium">Step ${index + 1}: ${step.description}</div>
-        <div class="text-sm opacity-75">${step.rule}</div>
+        <div class="font-medium text-base mb-1">Step ${index + 1}: ${step.description}</div>
+        <div class="text-sm opacity-75 font-mono">${step.rule}</div>
       `;
       stepsDiv.appendChild(stepElement);
     });
