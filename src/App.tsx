@@ -1,12 +1,54 @@
-import React, { useState } from 'react';
-import { Moon, Sun, Code2, GitGraph, Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Moon, Sun, Code2, GitGraph, Menu, X, FileCode } from 'lucide-react';
 import { CompilerVisualizer } from './components/CompilerVisualizer';
 import { AutomataConverter } from './components/AutomataConverter';
+import GrammarForm from './components/GrammarForm';
+import StepsDisplay from './components/StepsDisplay';
+import TableDisplay from './components/TableDisplay';
+import ParsingProcess from './components/ParsingProcess';
+import { LL1Parser } from './parser/ll1Parser';
+import { ParseResult } from './parser/types';
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [activeTab, setActiveTab] = useState<'compiler' | 'automata'>('compiler');
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode !== null ? JSON.parse(savedMode) : true; // Default to true for dark mode
+  });
+  const [activeTab, setActiveTab] = useState<'compiler' | 'automata' | 'll1'>('compiler');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [parserInstance, setParserInstance] = useState<LL1Parser | null>(null);
+  const [parseResult, setParseResult] = useState<ParseResult | null>(null);
+  const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
+  const handleParse = (grammar: string, inputString: string) => {
+    try {
+      const parser = new LL1Parser(grammar);
+      setParserInstance(parser);
+      const result = parser.parse(inputString);
+      setParseResult(result);
+      setError('');
+    } catch (e: any) {
+      setError(e.message);
+      setParserInstance(null);
+      setParseResult(null);
+    }
+  };
+
+  const nonTerminals = parserInstance
+    ? Array.from(parserInstance.nonTerminals)
+    : [];
+  const terminals = parserInstance
+    ? Array.from(parserInstance.terminals)
+    : [];
 
   return (
     <div className={`min-h-screen transition-colors duration-200 ${
@@ -19,7 +61,6 @@ function App() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex items-center space-x-2">
-                {/* <Code2 className="w-6 h-6" /> */}
                 <img src="./komi.png" alt="Logo" className="w-6 h-6" />
                 <h1 className="text-xl font-bold">Compiler Tools</h1>
               </div>
@@ -55,6 +96,21 @@ function App() {
               >
                 <GitGraph className="w-4 h-4 inline-block mr-2" />
                 Automata Converter
+              </button>
+              <button
+                onClick={() => setActiveTab('ll1')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activeTab === 'll1'
+                    ? isDarkMode
+                      ? 'bg-gray-700 text-white'
+                      : 'bg-gray-100 text-gray-900'
+                    : isDarkMode
+                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                }`}
+              >
+                <FileCode className="w-4 h-4 inline-block mr-2" />
+                LL(1) Parser
               </button>
             </div>
 
@@ -124,6 +180,24 @@ function App() {
                 <GitGraph className="w-4 h-4 mr-2" />
                 Automata Converter
               </button>
+              <button
+                onClick={() => {
+                  setActiveTab('ll1');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full px-3 py-2 rounded-md text-left text-sm font-medium transition-colors flex items-center ${
+                  activeTab === 'll1'
+                    ? isDarkMode
+                      ? 'bg-gray-700 text-white'
+                      : 'bg-gray-100 text-gray-900'
+                    : isDarkMode
+                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                }`}
+              >
+                <FileCode className="w-4 h-4 mr-2" />
+                LL(1) Parser
+              </button>
             </div>
           )}
         </div>
@@ -132,8 +206,40 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'compiler' ? (
           <CompilerVisualizer isDarkMode={isDarkMode} />
-        ) : (
+        ) : activeTab === 'automata' ? (
           <AutomataConverter isDarkMode={isDarkMode} />
+        ) : (
+          <div className={`space-y-6 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <GrammarForm onSubmit={handleParse} isDarkMode={isDarkMode} />
+            
+            {error && (
+              <div className="mt-4 bg-red-50 border border-red-200 rounded-md p-4">
+                <p className="text-sm text-red-700">{error}</p>
+              </div>
+            )}
+
+            {parserInstance && (
+              <>
+                <StepsDisplay title="Left Recursion Removal" steps={parserInstance.steps.leftRecursion} />
+                <StepsDisplay title="Left Factoring" steps={parserInstance.steps.leftFactoring} />
+                <TableDisplay
+                  first={parserInstance.first}
+                  follow={parserInstance.follow}
+                  parsingTable={parserInstance.parsingTable}
+                  nonTerminals={nonTerminals}
+                  terminals={terminals}
+                />
+              </>
+            )}
+
+            {parseResult && (
+              <ParsingProcess
+                steps={parseResult.steps}
+                success={parseResult.success}
+                error={parseResult.error}
+              />
+            )}
+          </div>
         )}
       </main>
     </div>
