@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Moon, Sun, Code2, GitGraph, Menu, X, FileCode } from 'lucide-react';
 import { CompilerVisualizer } from './components/CompilerVisualizer';
 import { AutomataConverter } from './components/AutomataConverter';
@@ -10,24 +10,12 @@ import { LL1Parser } from './parser/ll1Parser';
 import { ParseResult } from './parser/types';
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem('darkMode');
-    return savedMode !== null ? JSON.parse(savedMode) : true; // Default to true for dark mode
-  });
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeTab, setActiveTab] = useState<'compiler' | 'automata' | 'll1'>('compiler');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [parserInstance, setParserInstance] = useState<LL1Parser | null>(null);
   const [parseResult, setParseResult] = useState<ParseResult | null>(null);
   const [error, setError] = useState<string>('');
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
 
   const handleParse = (grammar: string, inputString: string) => {
     try {
