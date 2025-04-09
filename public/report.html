@@ -178,27 +178,27 @@
                 
                 <div class="grid grid-cols-2 gap-4 mt-8">
                     <div>
-                        <p class="font-semibold text-black">Student Name(s):</p>
+                        <p class="font-bold text-black">Student Name(s):</p>
                         <p class="text-black">Rutwik Butani</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-black">Enrollment No(s):</p>
+                        <p class="font-bold text-black">Enrollment No(s):</p>
                         <p class="text-black">202203103510304</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-black">Course & Semester:</p>
+                        <p class="font-bold text-black">Course & Semester:</p>
                         <p class="text-black">Compiler Design - 6th Semester</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-black">Institute Name:</p>
+                        <p class="font-bold text-black">Institute Name:</p>
                         <p class="text-black">Amtics</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-black">Guide Name:</p>
+                        <p class="font-bold text-black">Guide Name:</p>
                         <p class="text-black">Urvisha Patel</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-black">Submission Date:</p>
+                        <p class="font-bold text-black">Submission Date:</p>
                         <p class="text-black">April 9, 2025</p>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
             
             <div class="space-y-6">
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Recap of Phase 1 Work</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Recap of Phase 1 Work</h3>
                     <ul class="list-disc pl-6 space-y-2 text-black">
                         <li>Development of Parser Visualizer with interactive interface</li>
                         <li>Implementation of Automata Converter</li>
@@ -220,7 +220,7 @@
                 </div>
                 
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Objective of Phase 2 Upgrade</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Objective of Phase 2 Upgrade</h3>
                     <ul class="list-disc pl-6 space-y-2 text-black">
                         <li>Implementation of LL(1) Parser</li>
                         <li>Enhanced visualization capabilities</li>
@@ -236,7 +236,7 @@
             
             <div class="space-y-6">
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">LL(1) Parser Implementation</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">LL(1) Parser Implementation</h3>
                     <pre><code>export class LL1Parser {
     grammar: { [nonTerminal: string]: string[][] } = {};
     nonTerminals: Set&lt;string&gt; = new Set();
@@ -255,7 +255,7 @@
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">First Set Computation</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">First Set Computation</h3>
                     <pre><code>computeFirst() {
     // Initialize First sets
     for (const nt of this.nonTerminals) {
@@ -289,7 +289,7 @@
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Follow Set Computation</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Follow Set Computation</h3>
                     <pre><code>computeFollow() {
     // Initialize Follow sets
     for (const nt of this.nonTerminals) {
@@ -368,7 +368,7 @@
             
             <div class="space-y-6">
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Design & Logic</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Design & Logic</h3>
                     <ul class="list-disc pl-6 space-y-2 text-black">
                         <li>LL(1) Parser Implementation</li>
                         <li>First and Follow Set Computation</li>
@@ -377,7 +377,7 @@
                 </div>
                 
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Tools/Technologies Used</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Tools/Technologies Used</h3>
                     <ul class="list-disc pl-6 space-y-2 text-black">
                         <li>TypeScript</li>
                         <li>Tailwind CSS</li>
@@ -393,7 +393,7 @@
             
             <div class="space-y-6">
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Test Inputs</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Test Inputs</h3>
                     <pre><code># Sample Grammar
 E → T E'
 E' → + T E' | ε
@@ -403,14 +403,14 @@ F → ( E ) | id</code></pre>
                 </div>
                 
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Output Screenshots</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Output Screenshots</h3>
                     <div class="bg-white p-4 rounded-lg border border-gray-200">
                         [Add screenshots of your parser in action]
                     </div>
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Comparison with Phase 1</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Comparison with Phase 1</h3>
                     <ul class="list-disc pl-6 space-y-2 text-black">
                         <li>Improved parsing accuracy</li>
                         <li>Better error reporting</li>
@@ -427,39 +427,39 @@ F → ( E ) | id</code></pre>
             <div class="grid grid-cols-1 gap-8">
                 <!-- LL(1) Parser -->
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">LL(1) Parser</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">LL(1) Parser</h3>
                     <div class="image-container">
-                        <img src="../assets/screenshots/LL1_Parser_input.png" alt="LL(1) Parser Input" class="image-preview">
+                        <img src="/assets/screenshots/LL1_Parser_input.png" alt="LL(1) Parser Input" class="image-preview">
                         <div class="image-caption">LL(1) Parser Input Interface</div>
                     </div>
                     <div class="image-container">
-                        <img src="../assets/screenshots/LL1_Parser_output.png" alt="LL(1) Parser Output" class="image-preview">
+                        <img src="/assets/screenshots/LL1_Parser_output.png" alt="LL(1) Parser Output" class="image-preview">
                         <div class="image-caption">LL(1) Parser Output and Analysis</div>
                     </div>
                 </div>
 
                 <!-- Parser Visualizer -->
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Parser Visualizer</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Parser Visualizer</h3>
                     <div class="image-container">
-                        <img src="../assets/screenshots/parser_visulizer_input.png" alt="Parser Visualizer Input" class="image-preview">
+                        <img src="/assets/screenshots/parser_visulizer_input.png" alt="Parser Visualizer Input" class="image-preview">
                         <div class="image-caption">Parser Visualizer Input Interface</div>
                     </div>
                     <div class="image-container">
-                        <img src="../assets/screenshots/parser_visulizer_output.png" alt="Parser Visualizer Output" class="image-preview">
+                        <img src="/assets/screenshots/parser_visulizer_output.png" alt="Parser Visualizer Output" class="image-preview">
                         <div class="image-caption">Parser Visualizer Step-by-Step Output</div>
                     </div>
                 </div>
 
                 <!-- Automata Converter -->
                 <div>
-                    <h3 class="text-xl font-semibold text-black mb-3">Automata Converter</h3>
+                    <h3 class="text-xl font-bold text-black mb-3">Automata Converter</h3>
                     <div class="image-container">
-                        <img src="../assets/screenshots/automata_conversion_input.png" alt="Automata Converter Input" class="image-preview">
+                        <img src="/assets/screenshots/automata_conversion_input.png" alt="Automata Converter Input" class="image-preview">
                         <div class="image-caption">Automata Converter Input Interface</div>
                     </div>
                     <div class="image-container">
-                        <img src="../assets/screenshots/automata_conversion_output.png" alt="Automata Converter Output" class="image-preview">
+                        <img src="/assets/screenshots/automata_conversion_output.png" alt="Automata Converter Output" class="image-preview">
                         <div class="image-caption">Automata Converter Results</div>
                     </div>
                 </div>
