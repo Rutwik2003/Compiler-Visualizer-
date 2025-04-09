@@ -8,7 +8,7 @@ import {
 } from '../utils/automataUtils';
 
 export function useAutomata() {
-  const convertToAutomata = (regex: string, method: 'thompson' | 'syntaxTree') => {
+  const convertToAutomata = (regex: string, method: 'thompson' | 'syntaxTree', isDarkMode: boolean) => {
     // Clear previous graphs
     d3.select("#nfa-graph").selectAll("*").remove();
     d3.select("#dfa-graph").selectAll("*").remove();
@@ -39,8 +39,8 @@ export function useAutomata() {
         }
       }
 
-      drawNfaGraph(nfaStates, nfaLinks, nfa.accept.id, "#nfa-graph");
-      drawDfaGraph(dfa, "#dfa-graph");
+      drawNfaGraph(nfaStates, nfaLinks, nfa.accept.id, "#nfa-graph", isDarkMode);
+      drawDfaGraph(dfa, "#dfa-graph", isDarkMode);
       
       // Display steps
       const stepsDiv = document.getElementById('steps')!;
@@ -52,8 +52,8 @@ export function useAutomata() {
       ].join('<br>');
     } else {
       const { dfa, steps, treeNodes } = syntaxTreeDfa(regex);
-      drawSyntaxTree(treeNodes[treeNodes.length - 1], "#nfa-graph");
-      drawDfaGraph(dfa, "#dfa-graph");
+      drawSyntaxTree(treeNodes[treeNodes.length - 1], "#nfa-graph", isDarkMode);
+      drawDfaGraph(dfa, "#dfa-graph", isDarkMode);
       
       // Display steps
       const stepsDiv = document.getElementById('steps')!;
@@ -64,7 +64,7 @@ export function useAutomata() {
     }
   };
 
-  function drawNfaGraph(states: any[], links: any[], acceptId: number, selector: string) {
+  function drawNfaGraph(states: any[], links: any[], acceptId: number, selector: string, isDarkMode: boolean) {
     const width = 1100;
     const height = 400;
     const svg = d3.select(selector)
@@ -83,7 +83,7 @@ export function useAutomata() {
       .attr('markerHeight', 6)
       .append('svg:path')
       .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-      .attr('fill', '#666');
+      .attr('fill', isDarkMode ? '#9CA3AF' : '#666');
 
     // Force simulation
     const simulation = d3.forceSimulation(states)
@@ -98,7 +98,7 @@ export function useAutomata() {
       .selectAll('path')
       .data(links)
       .enter().append('path')
-      .attr('stroke', '#666')
+      .attr('stroke', isDarkMode ? '#9CA3AF' : '#666')
       .attr('stroke-width', 1.5)
       .attr('fill', 'none')
       .attr('marker-end', 'url(#arrowhead)');
@@ -111,7 +111,7 @@ export function useAutomata() {
       .attr('r', 12)
       .attr('fill', d => d.id === acceptId ? '#90ee90' : '#add8e6');
 
-    // Add labels
+    // Add labels (update the color here)
     const labels = svg.append('g')
       .selectAll('text')
       .data(states)
@@ -120,7 +120,7 @@ export function useAutomata() {
       .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
       .attr('font-size', '10px')
-      .attr('fill', '#333');
+      .attr('fill', isDarkMode ? '#FFFFFF' : '#000000'); // Adjust text color
 
     const linkLabelGroup = svg.append('g');
 
@@ -172,13 +172,13 @@ export function useAutomata() {
           .attr('text-anchor', 'middle')
           .attr('font-size', '10px')
           .attr('dy', '.35em')
-          .attr('fill', '#000000')
+          .attr('fill', isDarkMode ? '#FFFFFF' : '#000000') // Adjust text color
           .text(d.label);
       });
     });
   }
 
-  function drawDfaGraph(dfa: any, selector: string) {
+  function drawDfaGraph(dfa: any, selector: string, isDarkMode: boolean) {
     const width = 1100;
     const height = 400;
     const svg = d3.select(selector)
@@ -209,7 +209,7 @@ export function useAutomata() {
       .attr('markerHeight', 6)
       .append('svg:path')
       .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-      .attr('fill', '#666');
+      .attr('fill', isDarkMode ? '#9CA3AF' : '#666');
 
     const simulation = d3.forceSimulation(states)
       .force('charge', d3.forceManyBody().strength(-200))
@@ -222,7 +222,7 @@ export function useAutomata() {
       .selectAll('path')
       .data(links)
       .enter().append('path')
-      .attr('stroke', '#666')
+      .attr('stroke', isDarkMode ? '#9CA3AF' : '#666')
       .attr('stroke-width', 1.5)
       .attr('fill', 'none')
       .attr('marker-end', 'url(#arrowhead)');
@@ -242,7 +242,7 @@ export function useAutomata() {
       .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
       .attr('font-size', '10px')
-      .attr('fill', '#333');
+      .attr('fill', isDarkMode ? '#FFFFFF' : '#000000'); // Adjust text color
 
     const linkLabelGroup = svg.append('g');
 
@@ -275,23 +275,16 @@ export function useAutomata() {
         const dist = Math.sqrt(dx * dx + dy * dy);
         const dr = dist * 1.5;
 
-        let labelX, labelY;
+        let labelX = (sourceX + targetX) / 2;
+        let labelY = (sourceY + targetY) / 2;
 
-        if (d.source.id === d.target.id) {
-          labelX = sourceX + 25;
-          labelY = sourceY - 25;
-        } else {
-          labelX = (sourceX + targetX) / 2;
-          labelY = (sourceY + targetY) / 2;
+        if (dist > 0) {
+          const offsetFactor = Math.min(dr * 0.15, 25);
+          const offsetX = -dy / dist * offsetFactor;
+          const offsetY = dx / dist * offsetFactor;
 
-          if (dist > 0) {
-            const offsetFactor = Math.min(dr * 0.15, 25);
-            const offsetX = -dy / dist * offsetFactor;
-            const offsetY = dx / dist * offsetFactor;
-
-            labelX += offsetX;
-            labelY += offsetY;
-          }
+          labelX += offsetX;
+          labelY += offsetY;
         }
 
         linkLabelGroup.append('text')
@@ -300,53 +293,10 @@ export function useAutomata() {
           .attr('text-anchor', 'middle')
           .attr('font-size', '10px')
           .attr('dy', '.35em')
-          .attr('fill', '#333')
+          .attr('fill', isDarkMode ? '#FFFFFF' : '#000000') // Adjust text color
           .text(d.label);
       });
     });
-  }
-
-  function drawSyntaxTree(root: any, selector: string) {
-    const width = 1100;
-    const height = 400;
-    const svg = d3.select(selector)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height);
-
-    const g = svg.append('g')
-      .attr('transform', 'translate(50,30)');
-
-    const tree = d3.tree().size([width - 100, height - 60]);
-    const hierarchy = d3.hierarchy(root, d => [d.left, d.right].filter(Boolean));
-    tree(hierarchy);
-
-    const link = g.selectAll('.link')
-      .data(hierarchy.links())
-      .enter().append('path')
-      .attr('class', 'link')
-      .attr('d', d3.linkVertical()
-        .x(d => d.x)
-        .y(d => d.y))
-      .attr('stroke', '#666')
-      .attr('stroke-width', 1.5)
-      .attr('fill', 'none');
-
-    const node = g.selectAll('.node')
-      .data(hierarchy.descendants())
-      .enter().append('g')
-      .attr('transform', d => `translate(${d.x},${d.y})`);
-
-    node.append('circle')
-      .attr('r', 12)
-      .attr('fill', '#add8e6');
-
-    node.append('text')
-      .text(d => d.data.symbol)
-      .attr('dy', '.35em')
-      .attr('text-anchor', 'middle')
-      .attr('font-size', '10px')
-      .attr('fill', '#333');
   }
 
   return { convertToAutomata };

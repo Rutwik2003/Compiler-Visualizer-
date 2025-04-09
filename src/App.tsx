@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Moon, Sun, Code2, GitGraph, Menu, X, FileCode } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Moon, Sun, Code2, GitGraph, Menu, X, FileCode, FileText } from 'lucide-react';
 import { CompilerVisualizer } from './components/CompilerVisualizer';
 import { AutomataConverter } from './components/AutomataConverter';
 import GrammarForm from './components/GrammarForm';
@@ -10,12 +10,24 @@ import { LL1Parser } from './parser/ll1Parser';
 import { ParseResult } from './parser/types';
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [activeTab, setActiveTab] = useState<'compiler' | 'automata' | 'll1'>('compiler');
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode !== null ? JSON.parse(savedMode) : true; // Default to true for dark mode
+  });
+  const [activeTab, setActiveTab] = useState<'compiler' | 'automata' | 'll1' | 'report'>('compiler');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [parserInstance, setParserInstance] = useState<LL1Parser | null>(null);
   const [parseResult, setParseResult] = useState<ParseResult | null>(null);
   const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   const handleParse = (grammar: string, inputString: string) => {
     try {
@@ -40,7 +52,7 @@ function App() {
 
   return (
     <div className={`min-h-screen transition-colors duration-200 ${
-      isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'
+      isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
     }`}>
       <header className={`border-b ${
         isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
@@ -63,8 +75,8 @@ function App() {
                       ? 'bg-gray-700 text-white'
                       : 'bg-gray-100 text-gray-900'
                     : isDarkMode
-                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'text-gray-100 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 <Code2 className="w-4 h-4 inline-block mr-2" />
@@ -78,8 +90,8 @@ function App() {
                       ? 'bg-gray-700 text-white'
                       : 'bg-gray-100 text-gray-900'
                     : isDarkMode
-                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'text-gray-100 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 <GitGraph className="w-4 h-4 inline-block mr-2" />
@@ -93,12 +105,27 @@ function App() {
                       ? 'bg-gray-700 text-white'
                       : 'bg-gray-100 text-gray-900'
                     : isDarkMode
-                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'text-gray-100 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 <FileCode className="w-4 h-4 inline-block mr-2" />
                 LL(1) Parser
+              </button>
+              <button
+                onClick={() => setActiveTab('report')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activeTab === 'report'
+                    ? isDarkMode
+                      ? 'bg-gray-700 text-white'
+                      : 'bg-gray-100 text-gray-900'
+                    : isDarkMode
+                      ? 'text-gray-100 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                }`}
+              >
+                <FileText className="w-4 h-4 inline-block mr-2" />
+                Project Report
               </button>
             </div>
 
@@ -143,8 +170,8 @@ function App() {
                       ? 'bg-gray-700 text-white'
                       : 'bg-gray-100 text-gray-900'
                     : isDarkMode
-                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'text-gray-100 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 <Code2 className="w-4 h-4 mr-2" />
@@ -161,8 +188,8 @@ function App() {
                       ? 'bg-gray-700 text-white'
                       : 'bg-gray-100 text-gray-900'
                     : isDarkMode
-                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'text-gray-100 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 <GitGraph className="w-4 h-4 mr-2" />
@@ -179,12 +206,30 @@ function App() {
                       ? 'bg-gray-700 text-white'
                       : 'bg-gray-100 text-gray-900'
                     : isDarkMode
-                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'text-gray-100 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 <FileCode className="w-4 h-4 mr-2" />
                 LL(1) Parser
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('report');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full px-3 py-2 rounded-md text-left text-sm font-medium transition-colors flex items-center ${
+                  activeTab === 'report'
+                    ? isDarkMode
+                      ? 'bg-gray-700 text-white'
+                      : 'bg-gray-100 text-gray-900'
+                    : isDarkMode
+                      ? 'text-gray-100 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                }`}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Project Report
               </button>
             </div>
           )}
@@ -196,13 +241,13 @@ function App() {
           <CompilerVisualizer isDarkMode={isDarkMode} />
         ) : activeTab === 'automata' ? (
           <AutomataConverter isDarkMode={isDarkMode} />
-        ) : (
-          <div className={`space-y-6 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+        ) : activeTab === 'll1' ? (
+          <div className={`space-y-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
             <GrammarForm onSubmit={handleParse} isDarkMode={isDarkMode} />
             
             {error && (
-              <div className="mt-4 bg-red-50 border border-red-200 rounded-md p-4">
-                <p className="text-sm text-red-700">{error}</p>
+              <div className="mt-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-md p-4">
+                <p className="text-sm text-red-700 dark:text-red-100">{error}</p>
               </div>
             )}
 
@@ -228,6 +273,16 @@ function App() {
               />
             )}
           </div>
+        ) : (
+          <iframe 
+            src="/src/report.html" 
+            className={`w-full h-[calc(100vh-8rem)] rounded-lg ${
+              isDarkMode ? 'bg-gray-800' : 'bg-white'
+            } border ${
+              isDarkMode ? 'border-gray-700' : 'border-gray-200'
+            }`}
+            title="Project Report"
+          />
         )}
       </main>
     </div>
