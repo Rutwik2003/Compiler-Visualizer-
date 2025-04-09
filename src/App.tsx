@@ -275,7 +275,7 @@ function App() {
           </div>
         ) : (
           <iframe 
-            src="report.html" 
+            src="./report.html" 
             className={`w-full h-[calc(100vh-8rem)] rounded-lg ${
               isDarkMode ? 'bg-gray-800' : 'bg-white'
             } border ${

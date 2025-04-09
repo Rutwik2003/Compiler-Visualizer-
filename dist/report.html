@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compiler Design Project - Phase 2 Report</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 2rem;
+            background-color: #ffffff;
+            min-height: 100vh;
+            color: #000000;
+        }
+        
+        .container {
+            max-width: 64rem;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            padding: 2rem;
+        }
+
+        h1, h2, h3, h4, p, li {
+            color: #000000;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        code {
+            font-family: ui-monospace, monospace;
+            font-size: 0.875rem;
+            color: #000000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            color: #000000;
+        }
+
+        thead {
+            background-color: #f8f9fa;
+        }
+
+        .text-black {
+            color: #000000 !important;
+        }
+
+        .bg-white {
+            background-color: #ffffff !important;
+        }
+
+        .border-gray-200 {
+            border-color: #e5e7eb !important;
+        }
+
+        /* Image viewer styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            overflow: auto;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal img {
+            max-width: 95%;
+            max-height: 95vh;
+            object-fit: contain;
+            margin: auto;
+        }
+
+        .close {
+            position: fixed;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .image-container {
+            margin: 2rem auto;
+            position: relative;
+            width: 80%;
+            text-align: center;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .image-caption {
+            text-align: center;
+            margin-top: 1rem;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let modal = document.getElementById('imageModal');
+            let modalImg = document.getElementById('modalImage');
+            let closeBtn = document.getElementsByClassName('close')[0];
+
+            // Open modal
+            document.querySelectorAll('.image-preview').forEach(img => {
+                img.onclick = function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                }
+            });
+
+            // Close modal
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            // Close on click outside image
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Cover Page -->
+        <div class="p-8 border-b border-gray-200">
+            <h1 class="text-3xl font-bold text-center text-black mb-8">Compiler Design Project - Phase 2</h1>
+            
+            <div class="space-y-4">
+                <div class="text-center">
+                    <h2 class="text-2xl font-semibold text-black">Parser Visualizer & Automata Converter</h2>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mt-8">
+                    <div>
+                        <p class="font-semibold text-black">Student Name(s):</p>
+                        <p class="text-black">Rutwik Butani</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-black">Enrollment No(s):</p>
+                        <p class="text-black">202203103510304</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-black">Course & Semester:</p>
+                        <p class="text-black">Compiler Design - 6th Semester</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-black">Institute Name:</p>
+                        <p class="text-black">Amtics</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-black">Guide Name:</p>
+                        <p class="text-black">Urvisha Patel</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-black">Submission Date:</p>
+                        <p class="text-black">April 9, 2025</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Introduction -->
+        <section class="p-8 border-b border-gray-200">
+            <h2 class="text-2xl font-bold text-black mb-6">Introduction</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Recap of Phase 1 Work</h3>
+                    <ul class="list-disc pl-6 space-y-2 text-black">
+                        <li>Development of Parser Visualizer with interactive interface</li>
+                        <li>Implementation of Automata Converter</li>
+                        <li>Creation of user-friendly web interface</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Objective of Phase 2 Upgrade</h3>
+                    <ul class="list-disc pl-6 space-y-2 text-black">
+                        <li>Implementation of LL(1) Parser</li>
+                        <li>Enhanced visualization capabilities</li>
+                        <li>Improved error handling and reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Snippets Section -->
+        <section class="p-8 border-b border-gray-200">
+            <h2 class="text-2xl font-bold text-black mb-6">Code Implementation</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">LL(1) Parser Implementation</h3>
+                    <pre><code>export class LL1Parser {
+    grammar: { [nonTerminal: string]: string[][] } = {};
+    nonTerminals: Set&lt;string&gt; = new Set();
+    terminals: Set&lt;string&gt; = new Set();
+    first: { [nonTerminal: string]: Set&lt;string&gt; } = {};
+    follow: { [nonTerminal: string]: Set&lt;string&gt; } = {};
+    parsingTable: { [key: string]: string } = {};
+    
+    constructor(grammarInput: string) {
+        this.parseGrammar(grammarInput);
+        this.computeFirst();
+        this.computeFollow();
+        this.createParsingTable();
+    }
+}</code></pre>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">First Set Computation</h3>
+                    <pre><code>computeFirst() {
+    // Initialize First sets
+    for (const nt of this.nonTerminals) {
+        this.first[nt] = new Set();
+    }
+
+    let changed = true;
+    while (changed) {
+        changed = false;
+        for (const nt of this.nonTerminals) {
+            for (const production of this.grammar[nt]) {
+                let allCanBeEmpty = true;
+                for (const symbol of production) {
+                    if (this.terminals.has(symbol)) {
+                        if (!this.first[nt].has(symbol)) {
+                            this.first[nt].add(symbol);
+                            changed = true;
+                        }
+                        allCanBeEmpty = false;
+                        break;
+                    }
+                }
+                if (allCanBeEmpty &amp;&amp; !this.first[nt].has('ε')) {
+                    this.first[nt].add('ε');
+                    changed = true;
+                }
+            }
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Follow Set Computation</h3>
+                    <pre><code>computeFollow() {
+    // Initialize Follow sets
+    for (const nt of this.nonTerminals) {
+        this.follow[nt] = new Set();
+    }
+    
+    // Add $ to start symbol's follow set
+    const startSymbol = Array.from(this.nonTerminals)[0];
+    this.follow[startSymbol].add('$');
+
+    let changed = true;
+    while (changed) {
+        changed = false;
+        for (const nt of this.nonTerminals) {
+            for (const production of this.grammar[nt]) {
+                for (let i = 0; i &lt; production.length; i++) {
+                    const symbol = production[i];
+                    if (this.nonTerminals.has(symbol)) {
+                        const remaining = production.slice(i + 1);
+                        if (remaining.length === 0) {
+                            // Add Follow(nt) to Follow(symbol)
+                            for (const f of this.follow[nt]) {
+                                if (!this.follow[symbol].has(f)) {
+                                    this.follow[symbol].add(f);
+                                    changed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Enhancements -->
+        <section class="p-8 border-b border-gray-200">
+            <h2 class="text-2xl font-bold text-black mb-6">Project Enhancements</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Component</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Phase 1 Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Phase 2 Improvements</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-black">Parser</td>
+                            <td class="px-6 py-4 text-black">Basic visualization</td>
+                            <td class="px-6 py-4 text-black">Added LL(1) Parser functionality</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-black">User Interface</td>
+                            <td class="px-6 py-4 text-black">Simple input/output</td>
+                            <td class="px-6 py-4 text-black">Enhanced visualization for parsing steps</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-black">Error Handling</td>
+                            <td class="px-6 py-4 text-black">Basic error messages</td>
+                            <td class="px-6 py-4 text-black">Comprehensive error detection and reporting</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Detailed Description -->
+        <section class="p-8 border-b border-gray-200">
+            <h2 class="text-2xl font-bold text-black mb-6">Detailed Description of New Components</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Design & Logic</h3>
+                    <ul class="list-disc pl-6 space-y-2 text-black">
+                        <li>LL(1) Parser Implementation</li>
+                        <li>First and Follow Set Computation</li>
+                        <li>Parsing Table Generation</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Tools/Technologies Used</h3>
+                    <ul class="list-disc pl-6 space-y-2 text-black">
+                        <li>TypeScript</li>
+                        <li>Tailwind CSS</li>
+                        <li>Vite</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Cases -->
+        <section class="p-8">
+            <h2 class="text-2xl font-bold text-black mb-6">Test Cases & Output</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Test Inputs</h3>
+                    <pre><code># Sample Grammar
+E → T E'
+E' → + T E' | ε
+T → F T'
+T' → * F T' | ε
+F → ( E ) | id</code></pre>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Output Screenshots</h3>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200">
+                        [Add screenshots of your parser in action]
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Comparison with Phase 1</h3>
+                    <ul class="list-disc pl-6 space-y-2 text-black">
+                        <li>Improved parsing accuracy</li>
+                        <li>Better error reporting</li>
+                        <li>Enhanced visualization</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section class="screenshots-section">
+            <h2 class="text-2xl font-bold text-black mb-6">Implementation Screenshots</h2>
+            
+            <div class="grid grid-cols-1 gap-8">
+                <!-- LL(1) Parser -->
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">LL(1) Parser</h3>
+                    <div class="image-container">
+                        <img src="../assets/screenshots/LL1_Parser_input.png" alt="LL(1) Parser Input" class="image-preview">
+                        <div class="image-caption">LL(1) Parser Input Interface</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="../assets/screenshots/LL1_Parser_output.png" alt="LL(1) Parser Output" class="image-preview">
+                        <div class="image-caption">LL(1) Parser Output and Analysis</div>
+                    </div>
+                </div>
+
+                <!-- Parser Visualizer -->
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Parser Visualizer</h3>
+                    <div class="image-container">
+                        <img src="../assets/screenshots/parser_visulizer_input.png" alt="Parser Visualizer Input" class="image-preview">
+                        <div class="image-caption">Parser Visualizer Input Interface</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="../assets/screenshots/parser_visulizer_output.png" alt="Parser Visualizer Output" class="image-preview">
+                        <div class="image-caption">Parser Visualizer Step-by-Step Output</div>
+                    </div>
+                </div>
+
+                <!-- Automata Converter -->
+                <div>
+                    <h3 class="text-xl font-semibold text-black mb-3">Automata Converter</h3>
+                    <div class="image-container">
+                        <img src="../assets/screenshots/automata_conversion_input.png" alt="Automata Converter Input" class="image-preview">
+                        <div class="image-caption">Automata Converter Input Interface</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="../assets/screenshots/automata_conversion_output.png" alt="Automata Converter Output" class="image-preview">
+                        <div class="image-caption">Automata Converter Results</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
