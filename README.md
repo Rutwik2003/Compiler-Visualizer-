@@ -114,6 +114,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Rutwik Butani - rutwikbutani@gmail.com
+Rutwik Butani - rutwiksunibutani@gmail.com
 
 Project Link: [https://github.com/Rutwik2003/Compiler-Visualizer-](https://github.com/Rutwik2003/Compiler-Visualizer-)
